@@ -1,0 +1,44 @@
+1. Supongamos que en un repositorio GIT hiciste un commit y olvidaste un archivo.
+Explica cómo se soluciona si hiciste push, y cómo si aún no hiciste. De ser posible,
+que quede solo un commit con los cambios.
+
+    Para ambos casos (si se hizo push o no) podria utilizar un rebase, para sobre escribir
+    la historia de los commits y con un squash unificar y dejar un unico commit.
+    Cabe destacar que el comando rebase es un poco delicado por que se pueden perder  commits
+    importantes, pero para este caso particular se pudiera utilizar para dejar todos los cambios
+    en 1 solo commit.
+
+
+2. Si has trabajado con control de versiones ¿Cuál/es han sido los flujos con los que
+has trabajado? ¿Cuál ha sido la situación más compleja que has tenido con esto?
+
+    Principalmente he tenido la oportunidad de trabajar con el git workflow donde se tienen 2 ramas
+    principales (Master / Develop), partiendo de aqui se crean ramas nuevas por cada funcionalidad
+    que se este desarrollando, una vez esta funcionalidad esta totalmente aprobada y finalizada
+    se lleva a la rama develop para que pueda ser testeada nuevamente por personal de qa, esto haciendo
+    un MR (Merge Request) de encontrarse algun inconveniente este Merge Request es desecho eliminando
+    el commit y retrocediendo a una version anterior.
+
+    Si todo esta ok por parte de QA se hace el Merge Request de vuelta a la rama principal Master.
+
+3. ¿Qué experiencia has tenido con microservicios?
+
+    En mi trabajo actual utilizamos el lenguaje de programacion Go apoyandonos de la libreria
+    go-kit la cual esta enfocada en el desarrollo de microservicios.
+    Estos microservicios estan encargados de gestionar la comunicacion con los sistemas CORE del banco.
+    La arquitectura es la siguiente:
+        - Se tiene 1 microservicio por cada comunicacion con 1 Backend (Sistema Core) del banco.
+        - Se tiene un api principal que se encarga de orquestar todas las llamadas a los distintos
+          sistemas del banco para realizar una tarea en especifico.
+        - Este combo api/microservicios es aplicado por cada nueva funcionalidad que se requiera
+          hacer por parte de los distintos canales (Aplicaciones Web / Aplicaciones Mobiles)
+
+    De igual forma en previos trabajos utilizando Node JS en combinacion con la libreria micro tambien
+    he desarrollado microservicios para hacer tareas especificas como gestion de usuarios, gestion de
+    publicaciones y otras actividades puntuales.
+
+4. ¿Cuál es tu servicio favorito de AWS? ¿Por qué?
+
+    si bien mi experiencia con AWS no es tan grande 
+    (como por ejemplo no he tenido la oportunidad de utilizar EKS) yo diria que de lo que he utilizado 
+    el S3 me gusto bastante, el S3 es el storage para guardar informacion estatica.

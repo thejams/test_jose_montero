@@ -1,0 +1,68 @@
+Escribir las queries para:
+1. ¿Cuál es el jugador más viejo de cada equipo?
+
+    SELECT ee.nombre, ee.fecha_nacimiento, t.nombre AS equipo
+    FROM (
+    	SELECT j.nombre, j.fecha_nacimiento AS Max_Date, j.fk_equipo, e.nombre AS equipo
+        FROM dafiti_test.jugadores j
+        INNER JOIN (SELECT MIN(fecha_nacimiento) AS Max_Date FROM dafiti_test.jugadores) jj
+        ON  j.fecha_nacimiento = jj.Max_Date
+        INNER JOIN (SELECT id_equipos, nombre FROM dafiti_test.equipos) e on j.fk_equipo = e.id_equipos
+    ) as t
+    INNER JOIN dafiti_test.jugadores AS ee
+    WHERE ee.fk_equipo = t.fk_equipo AND ee.fecha_nacimiento = t.Max_Date
+
+
+
+
+2. ¿Cuántos partidos jugó de visitante cada equipo? (nota: hay equipos no jugaron
+ningún partido)
+
+    SELECT fk_equipo_visitante, count(*) AS JuegosVisitante, nombre AS Equipo
+    FROM dafiti_test.partidos
+    INNER JOIN dafiti_test.equipos
+    ON fk_equipo_visitante = id_equipos
+    GROUP BY fk_equipo_visitante
+
+
+
+3. ¿Qué equipos jugaron el 01/01/2016 y el 12/02/2016?
+
+    SELECT p.fk_equipo_local, p.fk_equipo_visitante, p.goles_local, p.goles_visitante, p.fecha_partido, e.nombre AS Locale, c.nombre AS Visitante
+    FROM dafiti_test.partidos p 
+    INNER JOIN dafiti_test.equipos e
+    ON p.fk_equipo_local = e.id_equipos
+    INNER JOIN dafiti_test.equipos c
+    ON p.fk_equipo_visitante = c.id_equipos
+    WHERE p.fecha_partido BETWEEN '2016/01/01' AND '2016/12/02'
+    
+
+
+4. Diga el total de goles que hizo el equipo “Chacarita” en su historia (como local o
+visitante)
+
+    SELECT e.nombre, locale.GolesLocal, visit.GolesVisita
+    FROM dafiti_test.equipos as e
+    INNER JOIN (
+    	SELECT SUM(p.goles_local) AS GolesLocal, ee.nombre AS Equipo
+    	FROM dafiti_test.partidos AS p
+    	INNER JOIN dafiti_test.equipos AS ee
+    	ON ee.nombre = "Chacarita"
+    	AND ee.id_equipos = p.fk_equipo_local
+    ) as locale
+    ON locale.Equipo = e.nombre
+    INNER JOIN (
+    	SELECT SUM(p.goles_visitante) AS GolesVisita, ee.nombre AS Equipo
+    	FROM dafiti_test.partidos AS p
+    	INNER JOIN dafiti_test.equipos AS ee
+    	ON ee.nombre = "Chacarita"
+    	AND ee.id_equipos = p.fk_equipo_visitante
+    ) as visit
+    ON visit.Equipo = e.nombre
+
+
+5. Necesitamos tener registro de los jugadores que hacen cada gol en los partidos,
+¿cómo lo harías?
+
+    Crearia una tabla llamada gol_detail en donde se tenga una referencia a la tabla
+    partidos y una referencia a la tabla jugadores
